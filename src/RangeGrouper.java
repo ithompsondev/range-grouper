@@ -38,6 +38,7 @@ public class RangeGrouper {
 	}
 	
 	// Using only forward sequential numbers with step 1
+	// Refactor
 	public void findRanges() {
 		ArrayList<Integer> seq = this.sequence.getSequence();
 		boolean inRange = false;
