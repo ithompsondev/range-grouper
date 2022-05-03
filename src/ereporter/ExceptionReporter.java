@@ -1,6 +1,7 @@
+package ereporter;
 
 public class ExceptionReporter {
-	protected static void errReasonAndExit(Exception e,String solution) {
+	public static void errReasonAndExit(Exception e,String solution) {
 		System.err.println("Message: " + e.getMessage());
 		if (e.getCause() != null) {
 			System.err.println("Cause: " + e.getCause());

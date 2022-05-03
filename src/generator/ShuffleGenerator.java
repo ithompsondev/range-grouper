@@ -1,11 +1,15 @@
+package generator;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import ereporter.ExceptionReporter;
+import sequence.NumberSequence;
 
 public class ShuffleGenerator extends IntegerGenerator {
 	private int shuffles;
 	
-	public ShuffleGenerator(int size) {
-		super(size);
+	public ShuffleGenerator(int min,int max) {
+		super(min,max);
 		this.shuffles = 1;
 	}
 	
@@ -23,16 +27,10 @@ public class ShuffleGenerator extends IntegerGenerator {
 		return this;
 	}
 	
-	public ArrayList<Integer> generate(int min,int max) {
-		this.checkBounds(min,max);
-		
+	public ArrayList<Integer> generate() {
 		int n = this.size;
 		for (int i = 0; i < n; i++) {
-			if (i >= n) {
-				// break here to maintain a collection of unique random numbers
-				break;
-			}
-			this.integers.add(min + i);
+			this.integers.add(this.min + i);
 		}
 		
 		for (int i = 0; i < this.shuffles; i++) {
@@ -43,13 +41,13 @@ public class ShuffleGenerator extends IntegerGenerator {
 	
 	public static void main(String args[]) {
 		System.out.println("\nAttempting shuffle generation of integers");
-		ShuffleGenerator gen = new ShuffleGenerator(100);
+		ShuffleGenerator gen = new ShuffleGenerator(1,100);
 		long start = System.nanoTime();
-		ArrayList<Integer> newSequence = gen.generate(100,1);
+		ArrayList<Integer> newSequence = gen.generate();
 		long end = System.nanoTime();
 		long elapsedShuffle = (end - start)/1000000;
 		NumberSequence newSeq = new NumberSequence(newSequence,NumberSequence.stringifySequence(newSequence));
-		//System.out.println(newSeq);
+		System.out.println(newSeq);
 		System.out.println("Shuffle Generation: " + elapsedShuffle + "ms");
 	}
 }

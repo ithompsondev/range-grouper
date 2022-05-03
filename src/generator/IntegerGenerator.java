@@ -1,12 +1,22 @@
+package generator;
 import java.util.ArrayList;
+
+import ereporter.ExceptionReporter;
 
 public abstract class IntegerGenerator {
 	
 	protected int size;
+	protected int min;
+	protected int max;
 	protected ArrayList<Integer> integers;
 	
-	public IntegerGenerator(int size) {
-		this.size = size;
+	// Derive the size of the collection from the (max - min + 1)
+	// Emulates the Python range(min,max-1) function
+	public IntegerGenerator(int min,int max) {
+		this.checkBounds(min,max);
+		this.size = max - min + 1;
+		this.min = min;
+		this.max = max;
 		this.integers = new ArrayList<>(size);
 	}
 	
@@ -16,8 +26,8 @@ public abstract class IntegerGenerator {
 	}
 	
 	// Generate a random integer between min and max inclusive
-	protected int generateRandomInteger(int min,int max) {
-		return (int) Math.floor(Math.random()*(max - min + 1) + min);
+	protected int generateRandomInteger() {
+		return (int) Math.floor(Math.random()*(this.max - this.min + 1) + this.min);
 	}
 	
 	protected void checkBounds(int min,int max) {
@@ -30,5 +40,5 @@ public abstract class IntegerGenerator {
 		}
 	}
 	
-	public abstract ArrayList<Integer> generate(int min,int max);
+	public abstract ArrayList<Integer> generate();
 }

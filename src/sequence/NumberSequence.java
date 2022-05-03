@@ -1,3 +1,4 @@
+package sequence;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+import ereporter.ExceptionReporter;
 
 public class NumberSequence {
 	private ArrayList<Integer> sequence;
@@ -66,6 +69,13 @@ public class NumberSequence {
 	
 	public static String stringifySequence(Collection<Integer> seq) {
 		return seq.stream().map(Object::toString).collect(Collectors.joining(","));
+	}
+	
+	public static Collection<Integer> collectifySequence(String seq) {
+		int convertedArr[] = Arrays.stream(seq.split(",")).mapToInt(Integer::parseInt).toArray();
+		Collection<Integer> collection = Arrays.stream(convertedArr).boxed().collect(Collectors.toList());
+		
+		return collection;
 	}
 	
 	public static void main(String args[]) {

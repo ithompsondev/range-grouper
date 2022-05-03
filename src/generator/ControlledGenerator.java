@@ -1,5 +1,8 @@
+package generator;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import sequence.NumberSequence;
 
 public class ControlledGenerator extends IntegerGenerator {
 	private int step;
@@ -8,8 +11,8 @@ public class ControlledGenerator extends IntegerGenerator {
 	
 	// Init the generator with a default step of 1 and a random chance to produce a sequential
 	// number
-	public ControlledGenerator(int size) {
-		super(size);
+	public ControlledGenerator(int min,int max) {
+		super(min,max);
 		this.step = 1; // sequential numbers will have a difference of 1 if sequentially generated
 		this.sequentialChance = Math.random();
 	}
@@ -30,9 +33,7 @@ public class ControlledGenerator extends IntegerGenerator {
 	}
 	
 	// Generate a list of (MAX - MIN + 1) random integers between MIN and MAX
-	public ArrayList<Integer> generate(int min, int max) {
-		this.checkBounds(min,max);
-		
+	public ArrayList<Integer> generate() {
 		int n = this.size;
 		int prev = 0;
 		int randomInteger = 0;
@@ -49,7 +50,7 @@ public class ControlledGenerator extends IntegerGenerator {
 				// next sequential number
 				randomInteger = this.generateNextInteger(prev);
 			} else {
-				randomInteger = this.generateRandomInteger(min,max);
+				randomInteger = this.generateRandomInteger();
 			}
 			
 			// If the collection already contains the currently generated integer OR
@@ -59,7 +60,7 @@ public class ControlledGenerator extends IntegerGenerator {
 			if (this.isNotBoundedOrContained(randomInteger,max)) {
 				// Generate unique integers
 				while (this.isNotBoundedOrContained(randomInteger,max)) {
-					randomInteger = this.generateRandomInteger(min,max);
+					randomInteger = this.generateRandomInteger();
 				}
 			}
 			
@@ -85,15 +86,15 @@ public class ControlledGenerator extends IntegerGenerator {
 	
 	public static void main(String args[]) {
 		System.out.println("Attempting primary generation of integers");
-		ControlledGenerator gen = new ControlledGenerator(1000).nextStep(1).withChance(0.5);
+		ControlledGenerator gen = new ControlledGenerator(1,100).nextStep(1).withChance(0.5);
 		System.out.printf("Sequential Chance %.2f\n",gen.sequentialChance);
 		long start = System.nanoTime();
-		ArrayList<Integer> sequence = gen.generate(1,1000);
+		ArrayList<Integer> sequence = gen.generate();
 		long end = System.nanoTime();
 		long elapsedPrimary = (end - start)/1000000;
 		String strSequence = NumberSequence.stringifySequence(sequence);
 		NumberSequence nseq = new NumberSequence(sequence,strSequence);
-		
+		System.out.println(nseq);
 		System.out.println("Controlled Generation: " + elapsedPrimary + "ms");
 	}
 }
