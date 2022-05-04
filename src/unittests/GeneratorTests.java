@@ -74,11 +74,4 @@ public class GeneratorTests {
 	
 		assertEquals(expected,actual);
 	}
-	
-	@Test
-	public void Forward_Generation_Of_Shuffle_Generated_Integers_Test() {
-		int min = 10;
-		int max = 1;
-		assertThrows(UnsupportedOperationException.class,()->{new ShuffleGenerator(min,max)});
-	}
 }

@@ -5,6 +5,14 @@ import java.util.Iterator;
 import numberrangesummarizer.NumberRangeSummarizer;
 import sequence.NumberSequence;
 
+/**
+ * Traverse the number sequence keeping track of when a range of numbers are
+ * being processed and constantly saving the results before returning the range groups
+ * as a comma delimited string.
+ * 
+ * @author Imtiyaaz Thompson
+ *
+ */
 public class RangeSummarizer implements NumberRangeSummarizer {
 	
 	@Override
@@ -18,7 +26,7 @@ public class RangeSummarizer implements NumberRangeSummarizer {
 		StringBuilder ranges = new StringBuilder();
 		Iterator<Integer> iter = input.iterator();
 		if (!iter.hasNext()) {
-			return null;
+			return "";
 		}
 		
 		int prev = iter.next();

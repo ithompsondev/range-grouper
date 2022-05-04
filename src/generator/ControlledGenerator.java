@@ -4,36 +4,57 @@ import java.util.Collections;
 
 import sequence.NumberSequence;
 
+/**
+ * This proves to be the least efficient generator for generating unique integers
+ * as opposed to the ShuffleGenerator. However, we trade efficiency with the ability to
+ * generate more sequential integers, which is useful for testing the correctness 
+ * of the solution.
+ * 
+ * We make our first assumption here: The numbers A and B are sequential if and only if
+ * B = A + 1
+ * 
+ * @author Imtiyaaz Thompson
+ *
+ */
 public class ControlledGenerator extends IntegerGenerator {
 	private int step;
 	// The chance the generator has of generating the next number in the sequence
 	private double sequentialChance;
-	
-	// Initialize the generator with a random chance of generating a sequential number
+
 	public ControlledGenerator(int min,int max) {
 		super(min,max);
 		this.step = 1; // sequential numbers will have a difference of 1 if sequentially generated
 		this.sequentialChance = Math.random();
 	}
 	
-	// Change the forward sequential jump
+	/**
+	 * We can later expand on the assumption where the numbers A and B are sequential if and
+	 * only if: B = A + STEP
+	 * 
+	 * @param step The increment from the number A to B if B is sequential to A
+	 * @return ControlledGenerator
+	 */
 	public ControlledGenerator nextStep(int step) {
 		this.step = step;
 		return this;
 	}
 	
-	// Change the chance with which this generator will produce a sequential integer
+	/**
+	 * Control the chance with which this generator will produce a number sequential to
+	 * the previously generated number
+	 * 
+	 * @param sequentialChance The chance as a probability from 0.0 to 1.0
+	 * @return ControlledGenerator
+	 */
 	public ControlledGenerator withChance(double sequentialChance) {
 		this.sequentialChance = sequentialChance;
 		return this;
 	}
 	
-	// Generate the next integer in the sequence given the step
 	private int generateNextInteger(int prev) {
 		return (prev + this.step);
 	}
 	
-	// Generate a list of (MAX - MIN + 1) random integers between MIN and MAX
 	public ArrayList<Integer> generate() {
 		int n = this.size;
 		int prev = 0;
@@ -49,12 +70,13 @@ public class ControlledGenerator extends IntegerGenerator {
 				randomInteger = this.generateRandomInteger();
 			}
 			
-			// If the collection already contains the currently generated integer OR
-			// The currently generated integer is the product of a sequential generation
-			// That is larger than the bounds set by the MAX variable, then generate a new 
-			// random integer
+			/*
+			 * If the collection already contains the currently generated integer OR
+			 * The currently generated integer is the product of a sequential generation
+			 * that is larger than the bounds set by the MAX variable, 
+			 * then generate a new random integer (Generate unique integers).
+			 */
 			if (this.isNotBoundedOrContained(randomInteger,max)) {
-				// Generate unique integers
 				while (this.isNotBoundedOrContained(randomInteger,max)) {
 					randomInteger = this.generateRandomInteger();
 				}
@@ -77,19 +99,5 @@ public class ControlledGenerator extends IntegerGenerator {
 	
 	private boolean isNotBoundedOrContained(int genInteger,int max) {
 		return (!this.isBounded(genInteger,max) || this.integers.contains(genInteger));
-	}
-	
-	public static void main(String args[]) {
-		System.out.println("Attempting primary generation of integers");
-		ControlledGenerator gen = new ControlledGenerator(1,100).nextStep(1).withChance(0.5);
-		System.out.printf("Sequential Chance %.2f\n",gen.sequentialChance);
-		long start = System.nanoTime();
-		ArrayList<Integer> sequence = gen.generate();
-		long end = System.nanoTime();
-		long elapsedPrimary = (end - start)/1000000;
-		String strSequence = NumberSequence.stringifySequence(sequence);
-		NumberSequence nseq = new NumberSequence(sequence,strSequence);
-		System.out.println(nseq);
-		System.out.println("Controlled Generation: " + elapsedPrimary + "ms");
 	}
 }

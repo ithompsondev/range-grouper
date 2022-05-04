@@ -4,6 +4,13 @@ import java.util.Collection;
 
 import sequence.NumberSequence;
 
+/**
+ * An intermediary class used to interface between the client program: Ranger.java and
+ * the number sequence traverser program: RangeSummarizer.java
+ * 
+ * @author Imtiyaaz Thompson
+ *
+ */
 public class RangeGrouper {
 	// We assume two numbers a and b to be sequential if b = a + 1
 	private NumberSequence sequence;
@@ -19,5 +26,9 @@ public class RangeGrouper {
 	public String groupRanges() {
 		String ranges = this.summarizer.summarizeCollection(this.collection);
 		return ranges;
+	}
+	
+	public Collection<Integer> getCollection() {
+		return this.collection;
 	}
 }

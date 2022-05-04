@@ -77,6 +77,7 @@ public class Ranger {
 	}
 	
 	public void usage() {
+		System.out.println("USAGE");
 		System.out.println("Loading sequence from file");
 		System.out.println("java Ranger -f path/to/file delimiter");
 		System.out.println();
@@ -119,8 +120,8 @@ public class Ranger {
 			RangeGrouper grouper = new RangeGrouper(sequence);
 			String ranges = grouper.groupRanges();
 
-			System.out.println(sequence);
-			System.out.println(ranges);
+			System.out.println("Input: " + sequence);
+			System.out.println("Result: " + ranges);
 		} else if (ranger.getMode() == GEN) {
 			int min = ranger.getMin();
 			int max = ranger.getMax();
@@ -131,8 +132,8 @@ public class Ranger {
 			RangeGrouper grouper = new RangeGrouper(sequence);
 			String ranges = grouper.groupRanges();
 
-			System.out.println(sequence);
-			System.out.println(ranges);
+			System.out.println("Input: " + sequence);
+			System.out.println("Result: " + ranges);
 		}
 	}
 }

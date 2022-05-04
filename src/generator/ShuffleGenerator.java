@@ -5,6 +5,17 @@ import java.util.Collections;
 import ereporter.ExceptionReporter;
 import sequence.NumberSequence;
 
+/**
+ * This is the more efficient generator of the two currently implemented generators.
+ * Here we trade the ability to influence how often we generate sequential integers with
+ * the speed we get from generating large collections of integers.
+ * 
+ * This generator simply generates a list of numbers from MIN to MAX inclusive, then proceeds
+ * to shuffle the list to produce a random list of integers.
+ * 
+ * @author Imtiyaaz Thompson
+ *
+ */
 public class ShuffleGenerator extends IntegerGenerator {
 	private int shuffles;
 	
@@ -13,6 +24,12 @@ public class ShuffleGenerator extends IntegerGenerator {
 		this.shuffles = 1;
 	}
 	
+	/**
+	 * Allow for more shuffling of the list
+	 * 
+	 * @param times The amount of time to shuffle the list of generated numbers
+	 * @return ShuffleGenerator
+	 */
 	public ShuffleGenerator shuffle(int times) {
 		try {
 			if (times <= 0) {
@@ -37,17 +54,5 @@ public class ShuffleGenerator extends IntegerGenerator {
 			Collections.shuffle(this.integers);	
 		}
 		return this.integers;
-	}
-	
-	public static void main(String args[]) {
-		System.out.println("\nAttempting shuffle generation of integers");
-		ShuffleGenerator gen = new ShuffleGenerator(1,100);
-		long start = System.nanoTime();
-		ArrayList<Integer> newSequence = gen.generate();
-		long end = System.nanoTime();
-		long elapsedShuffle = (end - start)/1000000;
-		NumberSequence newSeq = new NumberSequence(newSequence,NumberSequence.stringifySequence(newSequence));
-		System.out.println(newSeq);
-		System.out.println("Shuffle Generation: " + elapsedShuffle + "ms");
 	}
 }
