@@ -21,6 +21,11 @@ public class NumberSequence {
 		this.sequence = new ArrayList<>(sequence);
 		this.strSequence = strSequence;
  	}
+	
+	public NumberSequence(Collection<Integer> sequence) {
+		this.sequence = new ArrayList<>(sequence);
+		this.strSequence = stringifySequence(sequence);
+	}
 
 	public NumberSequence(String filePath,String delim) {
 		this.sequence = new ArrayList<>();
@@ -32,11 +37,13 @@ public class NumberSequence {
 			ExceptionReporter.errReasonAndExit(fne,"Ensure that the file name and extension are entered correctly");
 		} catch (InputMismatchException ime) {
 			// Did not read an integer, file contains erroneous values
-			ExceptionReporter.errReasonAndExit(ime,"Make sure that the file only contains whole non-decimal numbers");
+			ExceptionReporter.errReasonAndExit(ime,"Make sure that the file only contains non-decimal whole numbers");
 		} catch (NoSuchElementException nse) {
 			// Could no longer read for input
 			System.out.println("No more input to be parsed");
 			ExceptionReporter.errReasonAndExit(nse,"Ensure the read operation does not exceed the limit of the file");
+		} catch (NumberFormatException nfe) {
+			ExceptionReporter.errReasonAndExit(nfe,"Ensure the input file contains atleast one non-decimal whole number");
 		} finally {
 			file.close();
 		}
@@ -53,6 +60,10 @@ public class NumberSequence {
 	}
 	
 	private void parseFile() {
+		if (!file.hasNext()) {
+			throw new NumberFormatException("The file contains no non-decimal whole numbers");
+		}
+		
 		while (file.hasNext()) {
 			if (file.hasNextInt()) {
 				this.sequence.add(file.nextInt());

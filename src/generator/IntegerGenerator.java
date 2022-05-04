@@ -11,7 +11,7 @@ public abstract class IntegerGenerator {
 	protected ArrayList<Integer> integers;
 	
 	// Derive the size of the collection from the (max - min + 1)
-	// Emulates the Python range(min,max-1) function
+	// Emulates the Python range(min,max-1) function with inclusivity
 	public IntegerGenerator(int min,int max) {
 		this.checkBounds(min,max);
 		this.size = max - min + 1;

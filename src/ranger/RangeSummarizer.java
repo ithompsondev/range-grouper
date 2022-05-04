@@ -1,13 +1,11 @@
 package ranger;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import numberrangesummarizer.NumberRangeSummarizer;
 import sequence.NumberSequence;
 
 public class RangeSummarizer implements NumberRangeSummarizer {
-	
-	private ArrayList<Range> rangeGroups;
 	
 	@Override
 	public Collection<Integer> collect(String input) {
@@ -17,49 +15,50 @@ public class RangeSummarizer implements NumberRangeSummarizer {
 
 	@Override
 	public String summarizeCollection(Collection<Integer> input) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/*
-	 * 
-	 * REFACTOR INTO SUMMARIZE COLLECTION
-	 * 
-	 */
-		public void findRanges() {
-			ArrayList<Integer> seq = this.sequence.getSequence();
-			boolean inRange = false;
-			int prev = seq.get(0);
-			int start = -1;
-			int end = -1;
-			for (int i = 1; i < seq.size(); i++) {
-				int curr = seq.get(i);
-				if (curr == (prev + 1) && !inRange) {
-					start = prev;
-					inRange = true;
-				}
-				
-				if (curr != (prev + 1) && inRange) {
-					end = prev;
-					inRange = false;
-					this.rangeGroups.add(new Range(start,end));
-				}
-				
-				prev = curr;
-			}
+		StringBuilder ranges = new StringBuilder();
+		Iterator<Integer> iter = input.iterator();
+		if (!iter.hasNext()) {
+			return null;
 		}
 		
-		public String showSummary() {
-			if (this.rangeGroups.size() == 0) {
-				return "No ranges available in the given number sequence";
-			}
-			
-			StringBuilder sb = new StringBuilder();
-			for (Range range: this.rangeGroups) {
-				sb.append(range.toString() + ", ");
-			}
-			
-			return sb.toString();
-		}
+		int prev = iter.next();
+		int curr = prev;
+		int end = prev;
+		boolean processing = false; // track whether or not we are processing a range
+		while (iter.hasNext()) {
+			curr = iter.next();
 
+			if (this.isSequential(prev,curr)) {
+				if (!processing) {
+					ranges.append(prev + "-");
+					processing = true;
+				} 
+
+				end = curr;
+			} else {
+				if (processing) {
+					ranges.append(end + ", ");
+					processing = false;
+				} else {
+					ranges.append(prev + ", ");
+				}
+				
+				end = curr;
+			}
+			
+			prev = curr;
+		}
+		
+		if (end == curr) {
+			ranges.append(end + ", ");
+		}
+		
+		// Safe to use since we always build a string to end with the ',' character
+		ranges.delete(ranges.toString().lastIndexOf(","),ranges.length());
+		return ranges.toString();
+	}
+	
+	private boolean isSequential(int prev,int curr) {
+		return (curr == (prev + 1));
+	}
 }

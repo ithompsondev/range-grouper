@@ -1,7 +1,10 @@
 package ranger;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import ereporter.ExceptionReporter;
+import generator.ControlledGenerator;
+import generator.ShuffleGenerator;
 import sequence.NumberSequence;
 
 public class Ranger {
@@ -114,8 +117,22 @@ public class Ranger {
 			String delim = ranger.getDelim();
 			NumberSequence sequence = new NumberSequence(path,delim);
 			RangeGrouper grouper = new RangeGrouper(sequence);
-			grouper.groupRanges();
-			grouper.display();
+			String ranges = grouper.groupRanges();
+
+			System.out.println(sequence);
+			System.out.println(ranges);
+		} else if (ranger.getMode() == GEN) {
+			int min = ranger.getMin();
+			int max = ranger.getMax();
+			ShuffleGenerator generator = new ShuffleGenerator(min,max);
+			// ControlledGenerator generator = new ControlledGenerator(min,max).withChance(0.6);
+			ArrayList<Integer> integers = generator.generate();
+			NumberSequence sequence = new NumberSequence(integers);
+			RangeGrouper grouper = new RangeGrouper(sequence);
+			String ranges = grouper.groupRanges();
+
+			System.out.println(sequence);
+			System.out.println(ranges);
 		}
 	}
 }

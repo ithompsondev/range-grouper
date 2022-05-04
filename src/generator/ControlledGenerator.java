@@ -9,19 +9,20 @@ public class ControlledGenerator extends IntegerGenerator {
 	// The chance the generator has of generating the next number in the sequence
 	private double sequentialChance;
 	
-	// Init the generator with a default step of 1 and a random chance to produce a sequential
-	// number
+	// Initialize the generator with a random chance of generating a sequential number
 	public ControlledGenerator(int min,int max) {
 		super(min,max);
 		this.step = 1; // sequential numbers will have a difference of 1 if sequentially generated
 		this.sequentialChance = Math.random();
 	}
 	
+	// Change the forward sequential jump
 	public ControlledGenerator nextStep(int step) {
 		this.step = step;
 		return this;
 	}
 	
+	// Change the chance with which this generator will produce a sequential integer
 	public ControlledGenerator withChance(double sequentialChance) {
 		this.sequentialChance = sequentialChance;
 		return this;
@@ -40,11 +41,6 @@ public class ControlledGenerator extends IntegerGenerator {
 		this.integers.clear();
 		
 		for (int i = 0; i < n; i++) {
-			if (i >= n) {
-				// break here to maintain a collection of unique random numbers
-				break;
-			}
-			
 			if (this.canGenerateSequential()) {
 				// There should be at least one element in the collection before generating the
 				// next sequential number
@@ -54,7 +50,7 @@ public class ControlledGenerator extends IntegerGenerator {
 			}
 			
 			// If the collection already contains the currently generated integer OR
-			// The currently generated integers is the product of a sequential generation
+			// The currently generated integer is the product of a sequential generation
 			// That is larger than the bounds set by the MAX variable, then generate a new 
 			// random integer
 			if (this.isNotBoundedOrContained(randomInteger,max)) {
@@ -72,7 +68,6 @@ public class ControlledGenerator extends IntegerGenerator {
 	}
 	
 	private boolean canGenerateSequential() {
-		// Check that there is at least one element in the collection
 		return this.integers.size() > 0 && Math.random() < this.sequentialChance;
 	}
 	
